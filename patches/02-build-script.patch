@@ -1,0 +1,19 @@
+diff --git a/tools/linux_release_script/release.sh b/tools/linux_release_script/release.sh
+index 9390a3a4..fc79f4fc 100755
+--- a/tools/linux_release_script/release.sh
++++ b/tools/linux_release_script/release.sh
+@@ -64,11 +64,11 @@ cd "$app_folder"
+ echo "appfolder ${app_folder}"
+ 
+ echo "Build lingustics."
+-lrelease phoenix.pro
++/usr/lib/qt6/bin/lrelease phoenix.pro
+ 
+ echo "Compiling."
+-qmake CONFIG+=${target} DEFINES+=$quazip
+-make -j16
++qmake6 CONFIG+=${target} DEFINES+=$quazip phoenix.pro boost_root=/usr CLIPPER1=/usr
++make -j8
+ 
+ release_name=fritzing-${relname}.linux.${arch}
+ release_folder="${current_dir}/${release_name}"
