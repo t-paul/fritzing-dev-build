@@ -26,6 +26,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -t experimental -y -
 	libqt6sql6-sqlite \
 	pkg-config \
 	openssl \
+	xauth \
 	cmake \
 	make \
 	xvfb \

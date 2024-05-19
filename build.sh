@@ -27,16 +27,17 @@ fi
 	git commit -a -m "Build Patches"
 )
 
+COOKIE=$(xauth list | head -n 1 | awk '{ print ":0", $2, $3}')
+
 docker run \
 	-it \
-	--network=host \
-	--env LANG=C.UTF-8 \
-	--env DISPLAY=:0 \
 	--privileged \
-	-v "$HOME/.Xauthority:/root/.Xauthority:rw" \
+	--ipc=host \
+	--env LANG=C.UTF-8 \
+	--env COOKIE="$COOKIE" \
+	--env DISPLAY="$DISPLAY" \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
 	-v "$DIR:/fritzing" \
 	-w /fritzing \
 	"$TAG" \
-	bash -x ./tools/linux_release_script/release.sh "$VER"
-
+	bash -c 'xauth add $COOKIE && ./tools/linux_release_script/release.sh "$VER"'

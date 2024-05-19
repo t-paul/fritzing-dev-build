@@ -3,18 +3,19 @@
 TAG="fritzing/build:experimental"
 
 RUNDIR=$(echo $(pwd)/fritzing-app/fritzing-*.linux.*/)
+COOKIE=$(xauth list | head -n 1 | awk '{ print ":0", $2, $3}')
 
 docker run \
 	-it \
 	--privileged \
-	--network=host \
+	--ipc=host \
 	--env LANG=C.UTF-8 \
-	--env DISPLAY=:0 \
-	-v "$HOME/.Xauthority:/root/.Xauthority:rw" \
+	--env DISPLAY="$DISPLAY" \
+	--env COOKIE="$COOKIE" \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
 	-v "$HOME:/home/${USER}" \
 	-v "$RUNDIR:/fritzing" \
 	-w "/home/${USER}" \
 	"$TAG" \
-	/fritzing/Fritzing
+	bash -c 'xauth add $COOKIE && /fritzing/Fritzing'
 
