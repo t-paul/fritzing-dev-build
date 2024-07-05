@@ -1,5 +1,7 @@
 FROM debian:experimental
 
+ARG NGSPICE
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -t experimental -y --no-install-recommends \
 	libjpeg-dev \
 	libncurses-dev \
@@ -42,6 +44,6 @@ RUN \
 	cd build && \
 	make install
 
-RUN ln -s /usr /ngspice-40
+RUN ln -s /usr /$NGSPICE
 RUN ln -s /usr/local /quazip-$(qmake6 -query QT_VERSION)-1.4
 RUN git config --global --add safe.directory /fritzing

@@ -8,11 +8,18 @@ BRANCH=develop
 GIT_USER="Fritzing"
 GIT_MAIL="<none>"
 
-docker build --tag "$TAG" docker
+NGSPICE="$(grep NGSPICEPATH.*[0-9]$ fritzing-app/pri/spicedetect.pri | sed -e 's,.*/,,')"
+docker build --tag "$TAG" --build-arg=NGSPICE="$NGSPICE" docker
 
 if [ -d fritzing-app ]
 then
-	( cd fritzing-app && git reset --hard && git checkout "$BRANCH" && ( git branch -D build || true ) && git pull )
+	(
+		rm -rf fritzing-app/fritzing-*.linux.*
+		cd fritzing-app && git clean -xdf && git reset --hard
+		git checkout "$BRANCH"
+		git branch -D build || true
+		git pull
+	)
 else
 	git clone https://github.com/fritzing/fritzing-app
 fi
@@ -40,4 +47,4 @@ docker run \
 	-v "$DIR:/fritzing" \
 	-w /fritzing \
 	"$TAG" \
-	bash -c 'xauth add $COOKIE && ./tools/linux_release_script/release.sh "$VER"'
+	bash -c 'xauth add $COOKIE && ./tools/linux_release_script/release.sh '"$VER"

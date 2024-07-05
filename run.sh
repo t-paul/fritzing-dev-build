@@ -9,6 +9,7 @@ docker run \
 	-it \
 	--privileged \
 	--ipc=host \
+	--env USER="$USER" \
 	--env LANG=C.UTF-8 \
 	--env DISPLAY="$DISPLAY" \
 	--env COOKIE="$COOKIE" \
@@ -17,5 +18,5 @@ docker run \
 	-v "$RUNDIR:/fritzing" \
 	-w "/home/${USER}" \
 	"$TAG" \
-	bash -c 'xauth add $COOKIE && /fritzing/Fritzing'
+	bash -c 'export HOME="/home/${USER}" && xauth add $COOKIE && /fritzing/Fritzing'
 
