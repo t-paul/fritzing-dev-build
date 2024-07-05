@@ -8,9 +8,6 @@ BRANCH=develop
 GIT_USER="Fritzing"
 GIT_MAIL="<none>"
 
-NGSPICE="$(grep NGSPICEPATH.*[0-9]$ fritzing-app/pri/spicedetect.pri | sed -e 's,.*/,,')"
-docker build --tag "$TAG" --build-arg=NGSPICE="$NGSPICE" docker
-
 if [ -d fritzing-app ]
 then
 	(
@@ -23,6 +20,9 @@ then
 else
 	git clone https://github.com/fritzing/fritzing-app
 fi
+
+NGSPICE="$(grep NGSPICEPATH.*[0-9]$ fritzing-app/pri/spicedetect.pri | sed -e 's,.*/,,')"
+docker build --tag "$TAG" --build-arg=NGSPICE="$NGSPICE" docker
 
 (
 	cd fritzing-app
